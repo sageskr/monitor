@@ -1,0 +1,13 @@
+mon_db 为监控mysql的几项简单指标.
+1. 监控QPS,每秒监控数量
+2. 监控innodb的事务每秒提交数量.
+3. 以及从库延迟情况.
+4. 把上传至falcon_agent的脚本聚合成了一个类,更加方便使用.
+
+快速教程:
+```
+cd mon_db
+pip install -r pip_requre.txt```
+
+增加定时任务
+* * * * * python $PWD/mon_db/mon_db.py
