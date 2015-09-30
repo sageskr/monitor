@@ -11,3 +11,23 @@ pip install -r pip_requre.txt```
 
 增加定时任务
 * * * * * python $PWD/mon_db/mon_db.py
+
+
+alarm-plugin为短信报警的转换服务插件.
+使用方法:
+
+	把sender里面的sms接口修改为:http://localhost:18080/sms
+功能:
+1. 重新了复写了短信接口,因为默认的falcon上报的内容是tos=1111&content=xxxx,不太符合其他公司接口.
+2. 格式转换:
+    #找到机器ip,需要根据定制后的内容获取,修改falcon-agent的agent/cron/builder可以重构短信格式
+    sms_host = re.sub("(\[|\])","",re.findall("(\[\]|\[[^\]]+])",sms_message)[0])
+    #找到告警信息
+    sms_content = re.sub("(\[|\])","",re.findall("(\[\]|\[[^\]]+])",sms_message)[1])
+    #找到告警状态,正常还是异常,因为部分公司的接口不一样
+    sms_status = re.sub("(\[|\])","",re.findall("(\[\]|\[[^\]]+])",sms_message)[2])
+    #告警内容
+    sms_content = unicode(sms_content).encode("utf-8")
+3. hostname => ip的转换,部分同学使用了云主机,里面的hostname没有什么标识意义,因此去falcon的数据库中读取对应的IP.
+
+启动方法 nohup ./run.py &
