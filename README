@@ -31,3 +31,17 @@ alarm-plugin为短信报警的转换服务插件.
 3. hostname => ip的转换,部分同学使用了云主机,里面的hostname没有什么标识意义,因此去falcon的数据库中读取对应的IP.
 
 启动方法 nohup ./run.py &
+
+
+
+sendmail 为邮件发送的转换服务.
+前提:需要公司的邮件服务器开通smtp协议,支持登陆smtp命令发送邮件.
+
+配置方法:
+	1. 在app/config.py中修改相关参数
+	2. 在open-falcon中的alarm配置中将mail的配置修改为 http://localhost:port. [PS:port为config文件中所写的端口]
+
+功能:
+	提供了部分公司不具有发送邮件的服务接口.写了一个转换服务.
+
+使用方法: nohup ./run.py &
