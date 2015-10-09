@@ -15,7 +15,7 @@ def chk_health():
     """存活检测"""
     return "ok"
 
-@app.route("/mail")
+@app.route("/mail", methods=["POST"])
 def mail():
     '''发送邮件的主体逻辑'''
     mail_content = request.form["content"]
