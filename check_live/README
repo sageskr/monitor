@@ -1,0 +1,9 @@
+# 使用方法
+1. 构建go build socket_mon.go
+2. 使用:socket_mon ip_list
+
+## 逻辑  
+去检查IP的22端口是否存活.
+
+## IP_list撰写
+每行一个ip
