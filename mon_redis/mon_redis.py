@@ -13,7 +13,7 @@ def out_check_status():
         check_cmd = check_cmd + " -a %s" % (redis_passwd,)
     info = commands.getoutput(check_cmd)
     info_split = info.split(u"\r\n")
-    for _info in _info_split:
+    for _info in info_split:
         """这里取巧，因为falcon无法上报非数字的值，因此把非数字结果的都抛弃了"""
         _info_split = _info.split(":")
         if len(_info_split) == 2:
@@ -27,9 +27,12 @@ def out_check_status():
 def main():
     push_date = pub.P_data()
     redis_status = out_check_status()
-    for mon_key,mon_counterType in mon_status:
+    for mon_key,mon_counterType in mon_status.items():
         mon_tags="srv=redis,mon=%s" %(mon_key)
         mon_value = redis_status[mon_key]
-        push_date(metric=mon_key,value=mon_value,tag=mon_tags)
+        push_date.add(metric=mon_key,value=mon_value,tag=mon_tags,counterType=mon_counterType)
     push_date.push()
+
+if __name__ == "__main__":
+    main()
 
