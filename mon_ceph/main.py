@@ -16,9 +16,7 @@ ceph_name = cf.get("global", "ceph_name")
 r_header = {"Accept" : "application/json", "Accept-Encoding" : "gzip, deflate, sdch", "Cache-Control": "no-cache", "Pragma" : "no-cache", "Upgrade-Insecure-Requests" : "1", "User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36"}
 
 def post_data_2_kairosdb(postdata):
-    print recv_api,
     r = requests.post(recv_api, data=postdata)
-    print r.status_code
 
 
 class ceph_get(object):
@@ -33,7 +31,6 @@ class ceph_get(object):
             pass
         else:
             _osd_status = "%s%s" % (ceph_api, self.osd_status)
-            #print _osd_status
             ret = requests.get(_osd_status , headers = r_header)
             ret_body = ret.json()
             post_data = []
@@ -90,7 +87,6 @@ class ceph_get(object):
                 "tags":{"ceph_group": ceph_name },
             })
             ###已使用的存储空间precent
-            #print "%0.4f" % (ret_body['output']['pgmap']["bytes_used"] / float(ret_body['output']['pgmap']["bytes_total"]))
             post_data.append({
                 "name": "ceph_bytes_used",
                 "timestamp": _count_time * 1000,
@@ -154,7 +150,6 @@ class ceph_get(object):
 def main():
     while True:
         cur_time = int(time.time())
-        print cur_time
         k = ceph_get()
         threading.Thread(target=k.get_osd_status, args=(cur_time, 30)).start()
         threading.Thread(target=k.get_ceph_status, args=(cur_time, 30)).start()
@@ -163,11 +158,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# k = ceph_get()
-# for i in xrange(1000):
-#     cur_time = int(time.time())
-#     k.get_osd_status(cur_time=cur_time,round_time=30)
-#     k.get_ceph_status(cur_time=cur_time,round_time=30)
-#     k.get_pg_status(cur_time=cur_time,round_time=30)
-#     time.sleep(1)
